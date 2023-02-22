@@ -4,7 +4,10 @@ import jm.task.core.jdbc.model.User;
 import jm.task.core.jdbc.util.Util;
 
 import javax.swing.*;
-import java.sql.*;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,8 +32,7 @@ public class UserDaoJDBCImpl implements UserDao {
 
     public void dropUsersTable() {
         String sql = "DROP TABLE users;";
-        try(Connection connect = Util.getMySQLConnection();
-            PreparedStatement preparedStatement = connect.prepareStatement(sql)){
+        try(PreparedStatement preparedStatement = Util.getMySQLConnection().prepareStatement(sql)){
             preparedStatement.execute();
         } catch (SQLException e) {
             e.printStackTrace();
