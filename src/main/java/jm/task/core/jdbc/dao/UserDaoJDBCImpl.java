@@ -60,7 +60,8 @@ public class UserDaoJDBCImpl implements UserDao {
 
     public List<User> getAllUsers() {
         List<User> users = new ArrayList<>();
-        try (Statement statement = Util.getMySQLConnection().createStatement()) {
+        try (Connection connection = Util.getMySQLConnection();
+             Statement statement = connection.createStatement()) {
             ResultSet allUsers = statement.executeQuery("select * from users;");
             while (allUsers.next()) {
                 User n = new User(allUsers.getString("name"), allUsers.getString("lastName"),
@@ -75,7 +76,8 @@ public class UserDaoJDBCImpl implements UserDao {
     }
 
     public void cleanUsersTable() {
-        try (Statement statement = Util.getMySQLConnection().createStatement()) {
+        try (Connection connection = Util.getMySQLConnection();
+               Statement statement = connection.createStatement()) {
                 statement.executeUpdate("delete from users;");
 
         } catch (SQLException e) {
