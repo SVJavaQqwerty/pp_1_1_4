@@ -15,18 +15,18 @@ import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
-        UserDaoHibernateImpl userDaoHibernate = new UserDaoHibernateImpl();
+        UserDaoJDBCImpl userDaoJDBC = new UserDaoJDBCImpl();
 
-        userDaoHibernate.createUsersTable(); // работает
-        userDaoHibernate.saveUser("Name", "LastName", (byte) 65); // works
-        userDaoHibernate.removeUserById(6); // works
+        userDaoJDBC.createUsersTable(); // работает
+        userDaoJDBC.saveUser("Name", "LastName", (byte) 65); // works
+        userDaoJDBC.removeUserById(6); // works
 
-        List<User> users = userDaoHibernate.getAllUsers();
+        List<User> users = userDaoJDBC.getAllUsers();
         for (User user: users) {
             System.out.println(user.toString());
         }
 
-        userDaoHibernate.cleanUsersTable(); // Работает
-        userDaoHibernate.dropUsersTable(); // Работает
+        userDaoJDBC.cleanUsersTable(); // Работает
+        userDaoJDBC.dropUsersTable(); // Работает
     }
 }

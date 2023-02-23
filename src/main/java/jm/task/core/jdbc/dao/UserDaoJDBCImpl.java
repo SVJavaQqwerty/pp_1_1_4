@@ -4,14 +4,10 @@ import jm.task.core.jdbc.model.User;
 import jm.task.core.jdbc.util.Util;
 
 import javax.swing.*;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import static jm.task.core.jdbc.util.Util.getMySQLConnection;
 
 public class UserDaoJDBCImpl implements UserDao {
 
@@ -23,7 +19,8 @@ public class UserDaoJDBCImpl implements UserDao {
                 "age DECIMAL null,\n" +
                 "primary key (id)\n" +
                 ");";
-        try (PreparedStatement preparedStatement = Util.getMySQLConnection().prepareStatement(sql)) {
+        try (Connection connection = Util.getMySQLConnection();
+              PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.execute();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -31,26 +28,30 @@ public class UserDaoJDBCImpl implements UserDao {
     }
 
     public void dropUsersTable() {
-        String sql = "DROP TABLE users;";
-        try(PreparedStatement preparedStatement = Util.getMySQLConnection().prepareStatement(sql)){
-            preparedStatement.execute();
+        try(Connection connection = Util.getMySQLConnection();
+             Statement statement = connection.createStatement()){
+            statement.executeUpdate("DROP TABLE users;");
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
     public void saveUser(String name, String lastName, byte age) {
-        try (Statement statement = Util.getMySQLConnection().createStatement()) {
-            statement.executeUpdate("insert into users set name='" + name + "', lastName='"
-                    + lastName + "', age=" + age + ";");
+        String sql = "insert into users set name='" + name + "', lastName='"
+                + lastName + "', age=" + age + ";";
+        try (Connection connection = Util.getMySQLConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.execute();
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
     public void removeUserById(long id) {
-        try (Statement statement = Util.getMySQLConnection().createStatement()) {
-            statement.executeUpdate("delete from users where id = " + id + ";");
+        String sql = "delete from users where id = " + id + ";";
+        try (Connection connection = Util.getMySQLConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.execute();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -73,9 +74,10 @@ public class UserDaoJDBCImpl implements UserDao {
         return users;
     }
 
-    public void cleanUsersTable() throws SQLException, ClassNotFoundException {
-        try(Statement statement = Util.getMySQLConnection().createStatement()) {
-            statement.executeUpdate("delete from users;");
+    public void cleanUsersTable() {
+        try (Statement statement = Util.getMySQLConnection().createStatement()) {
+                statement.executeUpdate("delete from users;");
+
         } catch (SQLException e) {
             e.printStackTrace();
         }

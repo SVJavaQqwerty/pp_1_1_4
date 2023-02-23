@@ -6,6 +6,10 @@ import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.service.ServiceRegistry;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+
 
 public class Util {
     private static final String DRIVER = "com.mysql.cj.jdbc.Driver";
@@ -32,5 +36,14 @@ public class Util {
             e.printStackTrace();
         }
         return sessionFactory;
+    }
+
+    public static final Connection getMySQLConnection() {
+        try {
+            Connection connection = DriverManager.getConnection(HOST, LOGIN, PASSWORD);
+            return connection;
+        } catch (SQLException ex) {
+            throw new RuntimeException(ex);
+        }
     }
 }
