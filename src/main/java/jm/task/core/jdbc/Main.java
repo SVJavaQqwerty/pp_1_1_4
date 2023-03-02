@@ -14,19 +14,18 @@ import java.sql.Statement;
 import java.util.List;
 
 public class Main {
-    public static void main(String[] args) {
-        UserDaoJDBCImpl userDaoJDBC = new UserDaoJDBCImpl();
+    public static void main(String[] args) throws SQLException, ClassNotFoundException {
 
-        userDaoJDBC.createUsersTable(); // работает
-        userDaoJDBC.saveUser("Name", "LastName", (byte) 65); // works
-        userDaoJDBC.removeUserById(6); // works
+        UserService userService = new UserServiceImpl();
 
-        List<User> users = userDaoJDBC.getAllUsers();
+        userService.createUsersTable();
+        userService.saveUser("Name", "Lastname", (byte)23);
+        List<User> users = userService.getAllUsers();
         for (User user: users) {
             System.out.println(user.toString());
         }
-
-        userDaoJDBC.cleanUsersTable(); // Работает
-        userDaoJDBC.dropUsersTable(); // Работает
+        userService.removeUserById(1L);
+        userService.createUsersTable();
+        userService.dropUsersTable();
     }
 }

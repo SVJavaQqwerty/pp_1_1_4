@@ -16,7 +16,7 @@ public class Util {
     private static final String HOST = "jdbc:mysql://localhost:3306/pp_java";
     private static final String LOGIN = "root";
     private static final String PASSWORD = "1111";
-    private final static String DIALECT = "org.hibernate.dialect.MySQLDialect";
+    private static final String DIALECT = "org.hibernate.dialect.MySQLDialect";
     private static SessionFactory sessionFactory = null;
 
     private static final Configuration configuration = new Configuration()
@@ -38,10 +38,9 @@ public class Util {
         return sessionFactory;
     }
 
-    public static final Connection getMySQLConnection() {
+    public static Connection getMySQLConnection() {
         try {
-            Connection connection = DriverManager.getConnection(HOST, LOGIN, PASSWORD);
-            return connection;
+            return DriverManager.getConnection(HOST, LOGIN, PASSWORD);
         } catch (SQLException ex) {
             throw new RuntimeException(ex);
         }
